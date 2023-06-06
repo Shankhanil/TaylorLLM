@@ -1,0 +1,7 @@
+torch
+torchvision
+torchaudio
+transformers
+pandas
+tqdm
+
