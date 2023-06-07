@@ -61,12 +61,13 @@ def generate(model, tokenizer, prompt, entry_count=10, entry_length=300, top_p=0
     return generated_list
 
 model = GPT2LMHeadModel.from_pretrained('gpt2')
-weights = torch.load('wreckgar-49.pt')
+weights = torch.load('checkpoints/checkpoint-90.pt')
 # weights = torch.load('/home/bigthinx1/research/taylorllm/wreckgar-49.pt')
 model.load_state_dict(weights)
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
-prompt = "Why'd you want to go and lock me out when I let you in?"
+prompt = "<|startoftext|> It's me, hi \nIt's me, hi \n [Verse 1]\nI have this thing where I get older, but just never wiser"
+
 text = generate(model.to('cpu'), tokenizer, prompt, entry_count=1)
 
 # print(text)

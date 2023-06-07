@@ -1,0 +1,1 @@
+python main.py --task train --save-model --epoch 20

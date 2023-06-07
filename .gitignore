@@ -2,3 +2,4 @@
 data/
 __pycache__/
 lyrics-generation-with-GPT2/
+*.zip

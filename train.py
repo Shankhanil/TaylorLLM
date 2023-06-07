@@ -16,17 +16,19 @@ def pack_tensor(new_tensor, packed_tensor, max_seq_len):
 
 
 def train(
-    dataset, model, tokenizer,
-    batch_size=16, epochs=50, lr=1e-5,
-    max_seq_len=400, warmup_steps=200,
-    gpt2_type="gpt2", output_dir=".", output_prefix="wreckgar",
-    test_mode=False,save_model_on_epoch=True,
-):
+    dataset, model, tokenizer, args,
+    max_seq_len=400, warmup_steps=200, gpt2_type="gpt2", 
+    output_prefix="checkpoint", test_mode=False):
 
     acc_steps = 100
     device=torch.device("cuda")
     model = model.cuda()
     model.train()
+
+    batch_size, epochs, lr = args.batch_size, args.epoch, args.lr 
+    output_dir = args.save_path
+
+    print(f'Training for {epochs} epochs')
 
     optimizer = AdamW(model.parameters(), lr=lr)
     scheduler = get_linear_schedule_with_warmup(
@@ -37,6 +39,7 @@ def train(
     loss=0
     accumulating_batch_count = 0
     input_tensor = None
+
 
     for epoch in range(epochs):
 
@@ -61,7 +64,7 @@ def train(
 
             accumulating_batch_count += 1
             input_tensor = None
-        if save_model_on_epoch:
+        if args.save_model and epoch%args.save_freq == 0 and epoch>0:
             torch.save(
                 model.state_dict(),
                 os.path.join(output_dir, f"{output_prefix}-{epoch}.pt"),
