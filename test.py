@@ -4,6 +4,7 @@ from tqdm import tqdm, trange
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import os
+from config import CHECKPOINT_PATH, SOURCE_PATH, DUMP_PATH
 
 def generate(model, tokenizer, prompt, entry_count=10, entry_length=300, top_p=0.8, temperature=1.,):
     model.eval()
@@ -61,17 +62,19 @@ def generate(model, tokenizer, prompt, entry_count=10, entry_length=300, top_p=0
     return generated_list
 
 model = GPT2LMHeadModel.from_pretrained('gpt2')
-weights = torch.load('checkpoints/checkpoint-90.pt')
+weights = torch.load(CHECKPOINT_PATH)
 # weights = torch.load('/home/bigthinx1/research/taylorllm/wreckgar-49.pt')
 model.load_state_dict(weights)
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
-prompt = "<|startoftext|> It's me, hi \nIt's me, hi \n [Verse 1]\nI have this thing where I get older, but just never wiser"
+with open(SOURCE_PATH, "r") as fp:
+    source_text = fp.read()
+prompt = "<|startoftext|> " + source_text
 
 text = generate(model.to('cpu'), tokenizer, prompt, entry_count=1)
 
 # print(text)
-with open('test.txt', 'w') as fp:
+with open(DUMP_PATH, 'w') as fp:
     fp.write(text[0])
 
 
