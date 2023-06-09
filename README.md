@@ -50,4 +50,4 @@ python main.py -h
 Feedbacks are hugely welcome. Please register bugs, issues, feedbacks and suggestions in the Issues section. Feedbacks are also welcome through [email](shankha.rik@gmail.com).
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+See ``LICENSE.md`` for License details
